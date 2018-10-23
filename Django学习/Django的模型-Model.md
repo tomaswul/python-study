@@ -107,7 +107,7 @@ def create_stu(request):
 	类.objects.all() #返回值是querySet
 students = Student.objects.all()
 ```
-2.filte()方法:过滤查询部分的信息
+2.filter()方法:过滤查询部分的信息
 
 ```
 格式:
