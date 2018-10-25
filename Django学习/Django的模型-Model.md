@@ -15,7 +15,7 @@ tags:
 
 orm：object-relational-mapping 对象关系映射
 
-在创建app之后最后在这个app创建一个urls.py，并在当前项目的urls.py引入这个应用程序的urls.py，这样可以让每一个应用程序自己管理自己的url路由，提高url的可管理性。具体的配置，在项目的urls.py
+在创建app之后建议在这个app创建一个urls.py，并在当前项目的urls.py引入这个应用程序的urls.py，这样可以让每一个应用程序自己管理自己的url路由，提高url的可管理性。具体的配置，在项目的urls.py
 
 ```python
 from django.conf.urls import url, include
