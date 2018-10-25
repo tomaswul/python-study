@@ -11,11 +11,37 @@ tags:
 (djenv6) D:\Python_Study\workspace\day02>python manage.py startapp app
 ```
 
-![](C:\Users\吴亮\Desktop\人工智能\千锋培训python\python 第三阶段\DjangoApp文件结构.jpg)
-
 
 
 orm：object-relational-mapping 对象关系映射
+
+在创建app之后最后在这个app创建一个urls.py，并在当前项目的urls.py引入这个应用程序的urls.py，这样可以让每一个应用程序自己管理自己的url路由，提高url的可管理性。具体的配置，在项目的urls.py
+
+```python
+from django.conf.urls import url, include
+from django.contrib import admin
+
+urlpatterns = [
+    url(r'^admin/', admin.site.urls),
+    # 127.0.0.1:8080/app/xxxx
+    url(r'^app/', include('app.urls'))
+]
+
+```
+
+在app下的urls.py则是以下的方式:
+
+```python
+from django.conf.urls import url
+from app import views
+
+urlpatterns = [
+	url(r'^index/', views.index),
+	url(r'^all_stu/', views.all_stu),
+]
+```
+
+
 
 #### 创建model并映射到数据库
 1.在app里的models.py里创建学生类
@@ -315,6 +341,17 @@ class StudentInfo(models.Model):
 
 	class Meta:
 		db_table = 'student_info'
+  
+
+#多对多
+class Course(models.Model):
+	c_name = models.CharField(max_length=20)
+
+	# 多对多关联字段,这种方式不能自己定义中间表，设置两个外键和自己的字段
+	stu = models.ManyToManyField(Student)
+
+	class Meta:
+		db_table = 'course'
 ```
 
 
@@ -393,9 +430,49 @@ def sel_garde_stu(request):
 		print(stu.s_name)
 ```
 
-
-
 #### 4.3 多对多关系
+
+课程和学生是多对多的关系，一个课程可以被多个学生选择，一个学生也可以选择多个课程
+
+多对多的创建方式，主要是由两种，一个是中间表由系统创建，这种方式只需在多对多的两张表中的一张表添加一个字段用来管理另外一张表这个字段需要使用ManyToManyField(类)来关联多对多的另外一个模型。这样设计多对多的关系获取时应该是如果设置了关联字段的那一方直接是对象.关联字段.all(),就可以获取和这个记录有关的另一张表的信息，如果不是设置关联字段那一方就需要对象.类名_set.all()获取和这个记录有关的另一张表的信息。这里通过学生和课程来演示
+
+```python
+def test(request):
+	# 通过学生获取所有该学生所有的选课信息
+	cous = Student.objects.get(pk=1).course_set.all()
+
+	# 通过课程获取选择该课程的所有学生的信息
+	stus = Course.objects.get(pk=1).stu.all()
+```
+
+注意，在模板中也可以通过这种方式查询到关联表的信息（这点和java中的Hibernate相反，Hibernate必须设置以后才能关联查询，不然的话就只查询第一层）
+
+```django
+            {#通过学生获取扩展表信息#}
+            <td>{{ stu.studentinfo.phone }}</td>
+
+            {#通过学生获取课程信息#}
+            <td>{% for cou in stu.course_set.all %}
+                    {{ cou.c_name }}
+                {% endfor %}
+            </td>
+```
+
+
+
+同样多对多的关系也可以创建一张中间表，再对这个中间表分别设置关联两张多对多关系表外键，这样设计可以在这个中间表中添加自己想添加的字段，并且可以指定中间表的名称。例如课程和学生的中间表可以设置为成绩表
+
+```python
+class Score(models.Model):
+	cou_id = models.ForigenKeyField(Course)
+	stu_id = models.ForigenKeyField(Student)
+    score = models.DecimalField(decimal_places=1,max_digits=4,null=True)
+    
+    class Meta:
+        db_table = 'tb_score'
+```
+
+
 
 ### 5.Django中的view(MVT中的V)
 
