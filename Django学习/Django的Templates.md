@@ -201,5 +201,17 @@ xxxxxxxxxx {#继承base.html，index.html是base.html的子模板#}{%  extends 
   {% endifequal %}
 ```
 
+7.静态url设置，通过这样设置就可以在模板里面引用静态的css和js了
+
+需要在项目的setting.py文件的STATIC_URL下进行如下的设置
+
+```django
+# 指定静态目录static的地址
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+
+]
+```
+
 
 

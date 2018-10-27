@@ -11,8 +11,6 @@ tags:
 (djenv6) D:\Python_Study\workspace\day02>python manage.py startapp app
 ```
 
-
-
 orm：object-relational-mapping 对象关系映射
 
 在创建app之后建议在这个app创建一个urls.py，并在当前项目的urls.py引入这个应用程序的urls.py，这样可以让每一个应用程序自己管理自己的url路由，提高url的可管理性。具体的配置，在项目的urls.py
@@ -39,6 +37,57 @@ urlpatterns = [
 	url(r'^index/', views.index),
 	url(r'^all_stu/', views.all_stu),
 ]
+```
+
+##### url的正则匹配
+
+在进行url的配置的时候，如果url需要传入参数，需要用括号包含要传入的参数，如果需要传入多个参数则需要用多个括号，同时该url映射的views的方法也需要接收参数，并且多个参数的时候必须要符合顺序
+
+url传入一个参数的例子
+
+urls.py:
+
+```python
+url(r'^del_stu/(\d+)$', views.del_stu)
+```
+
+views.py
+
+```python
+def del_stu(request, stuid):
+   pass
+```
+
+url传入多个参数的例子
+
+urls.py:
+
+```python
+url(r'^add_cou/([a-z]{2,4})/([a-z]{3})', views.add_cou)
+
+```
+
+views.pu
+
+```python
+def add_cou(request,cou1,cou2):
+    pass
+```
+
+##### 使用关键字获取参数
+
+urls.py
+
+```python
+url('^test/(?P<test1>\w+)/(?P<test2>\w+)',views.test)
+(?P<test>)是指定参数名为test
+```
+
+views.py
+
+```python
+def test(request,test1,test2):
+	return HttpResponse(test1+"||"+test2)
 ```
 
 
