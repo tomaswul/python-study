@@ -9,11 +9,11 @@ RBAC（Role-Based Access Control，基于角色的访问控制），就是用户
 
 Django自带了用户-组-权限，以及他们之间的联系。图解为:
 
-![django权限联系图](../images/django权限图解.jpg)
+![django权限联系图](https://www.qygou.club/images/django%E6%9D%83%E9%99%90%E5%9B%BE%E8%A7%A3.jpg)
 
 django自带了用户表，也可以对用户表进行自定义，只需要继承django.contrib.auth.models.AbstarctUser即可。同时还有Group和Permission表。它们之间的关系实User和Group是多对多的，因此Django在定义User的Model时有一个groups字段来联系Group表，而User和Permission也是多对多的关系。User的Model中则是由user_permissions字段来联系Permission表。由于是多对多的关系，都生成了对应的中间表。Group和Permission表之间则是Group定义了permissons字段来关联Permission表。
 
-![django表之间的联系](../images/权限表之间的关联关系.jpg)
+![django表之间的联系](https://www.qygou.club/images/%E6%9D%83%E9%99%90%E8%A1%A8%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BB.jpg)
 
 ```
 权限:
@@ -52,7 +52,6 @@ def a(func):
 return b
 #django实现
 @permission_required('名称.权限名')
-
 
 ```
 
